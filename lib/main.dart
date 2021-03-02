@@ -90,6 +90,33 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Widget _buildLandScape() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Show Chart'),
+        Switch(
+          value: _showChart,
+          onChanged: (val) {
+            setState(() {
+              _showChart = val;
+            });
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _buildPortrait(MediaQueryData mediaQuery, AppBar appBar) {
+    return Container(
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
+      child: Chart(_recentTransactions),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -119,21 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Show Chart'),
-                  Switch(
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    },
-                  )
-                ],
-              ),
+            if (isLandscape) _buildLandScape(),
             if (!isLandscape)
               Container(
                 height: (mediaQuery.size.height -
@@ -144,15 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             if (!isLandscape) txListWidget,
             if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.7,
-                      child: Chart(_recentTransactions),
-                    )
-                  : txListWidget,
+              _showChart ? _buildPortrait(mediaQuery, appBar) : txListWidget,
           ],
         ),
       ),
