@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
-  Function clickHandler;
+  final Function clickHandler;
   NewTransaction(this.clickHandler);
 
   @override
